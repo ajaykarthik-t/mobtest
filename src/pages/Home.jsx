@@ -10,6 +10,7 @@ import receptionImage from '../assets/images/venues/reception.jpg';
 import theatreImage from '../assets/images/venues/Theatre.jpg';
 import cabaretImage from '../assets/images/venues/cararet.jpeg';
 import dinnerDanceImage from '../assets/images/venues/dinner-dance.jpg';
+import floorplanImage from '../assets/images/floor-plans/floorplan.webp';
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('Dinner');
@@ -252,11 +253,94 @@ const Home = () => {
                         </div>
                       </div>
                     </td>
-                    <td>
-                      <button className="download-button">
-                        <span className="download-icon">📥</span>
-                        FLOOR PLAN DOWNLOAD
-                      </button>
+                    <td className="floorplan-cell">
+                      <div className="floorplan-content">
+                        <div className="floorplan-image-container">
+                          <img 
+                            src={floorplanImage} 
+                            alt="Chairman's Lounge Floor Plan" 
+                            className="floorplan-image"
+                          />
+                        </div>
+                        
+                        <div className="floorplan-details">
+                          <h5 className="chairmans-title">CHAIRMAN'S LOUNGE</h5>
+                          <p className="chairmans-subtitle">Dining Packages · Enquire Now</p>
+                          
+                          <p className="chairmans-description">
+                            An intimate and versatile event space perfect for your next special event. The Chairman's Lounge offers the perfect blend of elegance and functionality.
+                          </p>
+                          
+                          {/* <div className="chairmans-capacity-container">
+                            <h6 className="chairmans-detail-title">CAPACITY</h6>
+                            <div className="capacity-badges">
+                              <div className="capacity-badge">
+                                <span className="capacity-type">Dinner</span>
+                                <span className="capacity-value">70</span>
+                              </div>
+                              <div className="capacity-badge">
+                                <span className="capacity-type">Dinner/Dance</span>
+                                <span className="capacity-value">55</span>
+                              </div>
+                              <div className="capacity-badge">
+                                <span className="capacity-type">Reception</span>
+                                <span className="capacity-value">90</span>
+                              </div>
+                              <div className="capacity-badge">
+                                <span className="capacity-type">Theatre</span>
+                                <span className="capacity-value">70</span>
+                              </div>
+                              <div className="capacity-badge">
+                                <span className="capacity-type">Boardroom</span>
+                                <span className="capacity-value">50</span>
+                              </div>
+                            </div>
+                          </div> */}
+                          
+                          {/* <div className="chairmans-features-container">
+                            <h6 className="chairmans-detail-title">FEATURES</h6>
+                            <div className="features-grid">
+                              <div className="feature-item">
+                                <span className="feature-icon">✓</span>
+                                <span>Accessible</span>
+                              </div>
+                              <div className="feature-item">
+                                <span className="feature-icon">☀️</span>
+                                <span>Natural daylight</span>
+                              </div>
+                              <div className="feature-item">
+                                <span className="feature-icon">👁️</span>
+                                <span>Pitch view</span>
+                              </div>
+                              <div className="feature-item">
+                                <span className="feature-icon">❄️</span>
+                                <span>Air-conditioning</span>
+                              </div>
+                              <div className="feature-item">
+                                <span className="feature-icon">📺</span>
+                                <span>LED Screens</span>
+                              </div>
+                              <div className="feature-item">
+                                <span className="feature-icon">📡</span>
+                                <span>Free WIFI</span>
+                              </div>
+                              <div className="feature-item">
+                                <span className="feature-icon">🅿️</span>
+                                <span>160 parking spaces</span>
+                              </div>
+                              <div className="feature-item">
+                                <span className="feature-icon">🍸</span>
+                                <span>Bar</span>
+                              </div>
+                            </div>
+                          </div> */}
+                          
+                          <button className="download-button">
+                            <span className="download-icon">📥</span>
+                            FLOOR PLAN DOWNLOAD
+                          </button>
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
