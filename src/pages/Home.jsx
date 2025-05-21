@@ -1,5 +1,5 @@
 // src/pages/Home.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.css';
 
 // Import images from your folders
@@ -13,6 +13,14 @@ import dinnerDanceImage from '../assets/images/venues/dinner-dance.jpg';
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('Dinner');
+  const [isAnimated, setIsAnimated] = useState(false);
+  
+  useEffect(() => {
+    // Add animation effect when category changes
+    setIsAnimated(true);
+    const timer = setTimeout(() => setIsAnimated(false), 300);
+    return () => clearTimeout(timer);
+  }, [selectedCategory]);
   
   const categories = [
     'Dinner',
@@ -31,8 +39,8 @@ const Home = () => {
       description: 'Wow guests at your next dinner, charity function or black tie event with the Howard Suite Dinner. The only suite in the world to overlook two international stadia, with uninterrupted views from towering windows. With award-winning catering and space to accommodate up to 450 guests, your dinner will be one to remember.',
       capacity: '450 capacity',
       view: 'View of both stadia',
-      roomConditions: ['Natural Daylight', 'Air Conditioning'],
-      connectivity: ['Portable', 'Portable projector', '10 plasma screens'],
+      roomConditions: ['Natural Daylight', 'Air Conditioning', 'Premium Furnishings'],
+      connectivity: ['High-speed Wi-Fi', 'Portable projector', '10 plasma screens'],
       dimensions: 'L 47.6m W 10.3m H 3.1m',
       size: '471m²',
       imagePath: dinnerImage
@@ -126,7 +134,7 @@ const Home = () => {
       </div>
         
       {/* Venue Details */}
-      <div className="venue-details">
+      <div className={`venue-details ${isAnimated ? 'fade-in' : ''}`}>
         {/* Hero Image */}
         <div className="hero-container">
           <img 
@@ -148,15 +156,7 @@ const Home = () => {
           <p className="venue-description">{currentVenue.description}</p>
             
           <div className="book-container">
-            <button 
-              className="book-button"
-              onMouseOver={(e) => {
-                e.currentTarget.classList.add('hover');
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.classList.remove('hover');
-              }}
-            >
+            <button className="book-button">
               BOOK NOW
             </button>
           </div>
