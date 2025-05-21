@@ -189,86 +189,78 @@ const Home = () => {
             </button>
           </div>
             
-          {/* Details Section */}
+          {/* Details Section with Table */}
           <div className="details-section">
             <h4 className="details-title">THE DETAILS</h4>
-              
-            <div className="details-grid">
-              {/* Room Conditions */}
-              <div className="details-card">
-                <h5 className="details-card-title">ROOM CONDITIONS</h5>
-                <div className="details-content">
-                  {currentVenue.roomConditions.map((condition, index) => (
-                    <div key={index} className="details-item">
-                      <div className="icon-wrapper">
-                        {condition === 'Natural Daylight' && 
-                          <div className="details-icon natural-daylight-icon">☀️</div>
-                        }
-                        {condition === 'Air Conditioning' && 
-                          <div className="details-icon air-conditioning-icon">❄️</div>
-                        }
-                        {condition !== 'Natural Daylight' && condition !== 'Air Conditioning' && 
-                          <div className="details-icon">•</div>
-                        }
+            
+            <div className="details-table-container">
+              <table className="details-table">
+                <thead>
+                  <tr>
+                    <th>ROOM CONDITIONS</th>
+                    <th>CONNECTIVITY</th>
+                    <th>ROOM DIMENSIONS</th>
+                    <th>FLOOR PLAN</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <ul className="table-list">
+                        {currentVenue.roomConditions.map((condition, index) => (
+                          <li key={index} className="table-list-item">
+                            <span className="table-icon">
+                              {condition === 'Natural Daylight' ? '☀️' : 
+                               condition === 'Air Conditioning' ? '❄️' : '•'}
+                            </span>
+                            <span>{condition.toUpperCase()}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td>
+                      <ul className="table-list">
+                        {currentVenue.connectivity.map((item, index) => (
+                          <li key={index} className="table-list-item">
+                            <span className="table-icon">
+                              {item === 'Portable' ? '🖥️' : 
+                               item === 'Portable Projector' ? '📽️' :
+                               item.includes('plasma') ? '📺' : '•'}
+                            </span>
+                            <span>{item.toUpperCase()}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td>
+                      <div className="dimensions-container">
+                        <div className="dimensions-row">
+                          <span className="dimensions-label">Length:</span>
+                          <span className="dimensions-value">{currentVenue.dimensions.length}</span>
+                        </div>
+                        <div className="dimensions-row">
+                          <span className="dimensions-label">Width:</span>
+                          <span className="dimensions-value">{currentVenue.dimensions.width}</span>
+                        </div>
+                        <div className="dimensions-row">
+                          <span className="dimensions-label">Height:</span>
+                          <span className="dimensions-value">{currentVenue.dimensions.height}</span>
+                        </div>
+                        <div className="dimensions-row total-size">
+                          <span className="dimensions-label">Total Size:</span>
+                          <span className="dimensions-value size-highlight">{currentVenue.size}</span>
+                        </div>
                       </div>
-                      <div className="details-text">{condition.toUpperCase()}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-                
-              {/* Connectivity */}
-              <div className="details-card">
-                <h5 className="details-card-title">CONNECTIVITY</h5>
-                <div className="details-content">
-                  {currentVenue.connectivity.map((item, index) => (
-                    <div key={index} className="details-item">
-                      <div className="icon-wrapper">
-                        {item === 'Portable' && 
-                          <div className="details-icon portable-icon">🖥️</div>
-                        }
-                        {item === 'Portable Projector' && 
-                          <div className="details-icon projector-icon">📽️</div>
-                        }
-                        {item.includes('plasma') && 
-                          <div className="details-icon screen-icon">📺</div>
-                        }
-                        {!item.includes('Portable') && !item.includes('plasma') && 
-                          <div className="details-icon">•</div>
-                        }
-                      </div>
-                      <div className="details-text">{item.toUpperCase()}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-                
-              {/* Room Dimensions */}
-              <div className="details-card">
-                <h5 className="details-card-title">ROOM DIMENSIONS</h5>
-                <div className="details-content">
-                  <div className="dimensions-icon">📐</div>
-                  <div className="dimensions-info">
-                    <div className="dimensions-text">
-                      L {currentVenue.dimensions.length} W {currentVenue.dimensions.width} H {currentVenue.dimensions.height}
-                    </div>
-                  </div>
-                </div>
-                <div className="overall-size">
-                  <h5 className="size-title">OVERALL SIZE</h5>
-                  <div className="size-value">{currentVenue.size}</div>
-                </div>
-              </div>
-                
-              {/* Floor Plan */}
-              <div className="details-card">
-                <h5 className="details-card-title">FLOOR PLAN</h5>
-                <div className="floor-plan-download">
-                  <button className="floor-plan-button">
-                    FLOOR PLAN DOWNLOAD
-                  </button>
-                </div>
-              </div>
+                    </td>
+                    <td>
+                      <button className="download-button">
+                        <span className="download-icon">📥</span>
+                        FLOOR PLAN DOWNLOAD
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
