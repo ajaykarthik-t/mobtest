@@ -39,9 +39,13 @@ const Home = () => {
       description: 'Wow guests at your next dinner, charity function or black tie event with the Howard Suite Dinner. The only suite in the world to overlook two international stadia, with uninterrupted views from towering windows. With award-winning catering and space to accommodate up to 450 guests, your dinner will be one to remember.',
       capacity: '450 capacity',
       view: 'View of both stadia',
-      roomConditions: ['Natural Daylight', 'Air Conditioning', 'Premium Furnishings'],
-      connectivity: ['High-speed Wi-Fi', 'Portable projector', '10 plasma screens'],
-      dimensions: 'L 47.6m W 10.3m H 3.1m',
+      roomConditions: ['Natural Daylight', 'Air Conditioning'],
+      connectivity: ['Portable', 'Portable Projector', '10 plasma screens'],
+      dimensions: {
+        length: '47.6m',
+        width: '10.3m',
+        height: '3.1m'
+      },
       size: '471m²',
       imagePath: dinnerImage
     },
@@ -52,7 +56,11 @@ const Home = () => {
       view: 'Garden view',
       roomConditions: ['Natural Daylight', 'Air Conditioning', 'Configurable Lighting'],
       connectivity: ['Wi-Fi', 'Digital displays', '8 plasma screens'],
-      dimensions: 'L 50.2m W 18.7m H 4.5m',
+      dimensions: {
+        length: '50.2m',
+        width: '18.7m',
+        height: '4.5m'
+      },
       size: '938m²',
       imagePath: exhibitionImage
     },
@@ -63,7 +71,11 @@ const Home = () => {
       view: 'City skyline',
       roomConditions: ['Natural Daylight', 'Air Conditioning', 'Acoustic Panels'],
       connectivity: ['Interactive whiteboard', 'Video conferencing', '6 monitors'],
-      dimensions: 'L 18.3m W 12.1m H 3.0m',
+      dimensions: {
+        length: '18.3m',
+        width: '12.1m',
+        height: '3.0m'
+      },
       size: '221m²',
       imagePath: classroomImage
     },
@@ -74,7 +86,11 @@ const Home = () => {
       view: 'Atrium view',
       roomConditions: ['Natural Daylight', 'Climate Control', 'Ambient Lighting'],
       connectivity: ['Sound system', 'Wireless presentations', '4 digital signage screens'],
-      dimensions: 'L 32.8m W 15.4m H 6.2m',
+      dimensions: {
+        length: '32.8m',
+        width: '15.4m',
+        height: '6.2m'
+      },
       size: '505m²',
       imagePath: receptionImage
     },
@@ -85,7 +101,11 @@ const Home = () => {
       view: 'Internal',
       roomConditions: ['Professional Lighting', 'Climate Control', 'Acoustic Design'],
       connectivity: ['Professional AV system', 'Recording capability', 'Stage monitors'],
-      dimensions: 'L 28.5m W 22.3m H 7.2m',
+      dimensions: {
+        length: '28.5m',
+        width: '22.3m',
+        height: '7.2m'
+      },
       size: '635m²',
       imagePath: theatreImage
     },
@@ -96,7 +116,11 @@ const Home = () => {
       view: 'Night skyline',
       roomConditions: ['Adjustable Lighting', 'Climate Control', 'Sound Insulation'],
       connectivity: ['Performance sound system', 'Stage lighting', 'Projection capabilities'],
-      dimensions: 'L 24.8m W 18.6m H 4.8m',
+      dimensions: {
+        length: '24.8m',
+        width: '18.6m',
+        height: '4.8m'
+      },
       size: '461m²',
       imagePath: cabaretImage
     },
@@ -107,7 +131,11 @@ const Home = () => {
       view: 'Garden terrace',
       roomConditions: ['Dimmable Lighting', 'Climate Control', 'Dance Floor'],
       connectivity: ['DJ booth', 'Light show capabilities', 'Premium sound system'],
-      dimensions: 'L 36.2m W 22.5m H 5.3m',
+      dimensions: {
+        length: '36.2m',
+        width: '22.5m',
+        height: '5.3m'
+      },
       size: '815m²',
       imagePath: dinnerDanceImage
     }
@@ -157,55 +185,89 @@ const Home = () => {
             
           <div className="book-container">
             <button className="book-button">
-              BOOK NOW
+              CHECK AVAILABILITY
             </button>
           </div>
             
           {/* Details Section */}
           <div className="details-section">
-            <h4 className="details-title">The Details</h4>
+            <h4 className="details-title">THE DETAILS</h4>
               
             <div className="details-grid">
               {/* Room Conditions */}
               <div className="details-card">
-                <h5 className="details-card-title">Room Conditions</h5>
-                <ul className="details-list">
+                <h5 className="details-card-title">ROOM CONDITIONS</h5>
+                <div className="details-content">
                   {currentVenue.roomConditions.map((condition, index) => (
-                    <li key={index} className="details-list-item">
-                      <span className="checkmark">✓</span>
-                      {condition}
-                    </li>
+                    <div key={index} className="details-item">
+                      <div className="icon-wrapper">
+                        {condition === 'Natural Daylight' && 
+                          <div className="details-icon natural-daylight-icon">☀️</div>
+                        }
+                        {condition === 'Air Conditioning' && 
+                          <div className="details-icon air-conditioning-icon">❄️</div>
+                        }
+                        {condition !== 'Natural Daylight' && condition !== 'Air Conditioning' && 
+                          <div className="details-icon">•</div>
+                        }
+                      </div>
+                      <div className="details-text">{condition.toUpperCase()}</div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
                 
               {/* Connectivity */}
               <div className="details-card">
-                <h5 className="details-card-title">Connectivity</h5>
-                <ul className="details-list">
+                <h5 className="details-card-title">CONNECTIVITY</h5>
+                <div className="details-content">
                   {currentVenue.connectivity.map((item, index) => (
-                    <li key={index} className="details-list-item">
-                      <span className="bullet">•</span>
-                      {item}
-                    </li>
+                    <div key={index} className="details-item">
+                      <div className="icon-wrapper">
+                        {item === 'Portable' && 
+                          <div className="details-icon portable-icon">🖥️</div>
+                        }
+                        {item === 'Portable Projector' && 
+                          <div className="details-icon projector-icon">📽️</div>
+                        }
+                        {item.includes('plasma') && 
+                          <div className="details-icon screen-icon">📺</div>
+                        }
+                        {!item.includes('Portable') && !item.includes('plasma') && 
+                          <div className="details-icon">•</div>
+                        }
+                      </div>
+                      <div className="details-text">{item.toUpperCase()}</div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
                 
               {/* Room Dimensions */}
               <div className="details-card">
-                <h5 className="details-card-title">Room Dimensions</h5>
-                <p>{currentVenue.dimensions}</p>
-                <p className="size-info">Overall Size: {currentVenue.size}</p>
+                <h5 className="details-card-title">ROOM DIMENSIONS</h5>
+                <div className="details-content">
+                  <div className="dimensions-icon">📐</div>
+                  <div className="dimensions-info">
+                    <div className="dimensions-text">
+                      L {currentVenue.dimensions.length} W {currentVenue.dimensions.width} H {currentVenue.dimensions.height}
+                    </div>
+                  </div>
+                </div>
+                <div className="overall-size">
+                  <h5 className="size-title">OVERALL SIZE</h5>
+                  <div className="size-value">{currentVenue.size}</div>
+                </div>
               </div>
                 
               {/* Floor Plan */}
               <div className="details-card">
-                <h5 className="details-card-title">Floor Plan</h5>
-                <button className="download-button">
-                  <span className="download-icon">↓</span>
-                  Floor Plan Download
-                </button>
+                <h5 className="details-card-title">FLOOR PLAN</h5>
+                <div className="floor-plan-download">
+                  <button className="floor-plan-button">
+                    FLOOR PLAN DOWNLOAD
+                  </button>
+                </div>
               </div>
             </div>
           </div>
