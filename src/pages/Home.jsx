@@ -1,6 +1,7 @@
 // src/pages/Home.jsx
 import React, { useState, useEffect } from 'react';
 import './Home.css';
+import CalendarModal from '../components/CalandarModal';
 
 // Import images from your folders
 import dinnerImage from '../assets/images/venues/dinner.jpeg';
@@ -15,6 +16,7 @@ import floorplanImage from '../assets/images/floor-plans/floorplan.webp';
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('Dinner');
   const [isAnimated, setIsAnimated] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false); // State for the calendar modal
   
   useEffect(() => {
     // Add animation effect when category changes
@@ -185,7 +187,10 @@ const Home = () => {
           <p className="venue-description">{currentVenue.description}</p>
             
           <div className="book-container">
-            <button className="book-button">
+            <button 
+              className="book-button"
+              onClick={() => setIsCalendarOpen(true)} // Open calendar modal on button click
+            >
               CHECK AVAILABILITY
             </button>
           </div>
@@ -271,70 +276,6 @@ const Home = () => {
                             An intimate and versatile event space perfect for your next special event. The Chairman's Lounge offers the perfect blend of elegance and functionality.
                           </p>
                           
-                          {/* <div className="chairmans-capacity-container">
-                            <h6 className="chairmans-detail-title">CAPACITY</h6>
-                            <div className="capacity-badges">
-                              <div className="capacity-badge">
-                                <span className="capacity-type">Dinner</span>
-                                <span className="capacity-value">70</span>
-                              </div>
-                              <div className="capacity-badge">
-                                <span className="capacity-type">Dinner/Dance</span>
-                                <span className="capacity-value">55</span>
-                              </div>
-                              <div className="capacity-badge">
-                                <span className="capacity-type">Reception</span>
-                                <span className="capacity-value">90</span>
-                              </div>
-                              <div className="capacity-badge">
-                                <span className="capacity-type">Theatre</span>
-                                <span className="capacity-value">70</span>
-                              </div>
-                              <div className="capacity-badge">
-                                <span className="capacity-type">Boardroom</span>
-                                <span className="capacity-value">50</span>
-                              </div>
-                            </div>
-                          </div> */}
-                          
-                          {/* <div className="chairmans-features-container">
-                            <h6 className="chairmans-detail-title">FEATURES</h6>
-                            <div className="features-grid">
-                              <div className="feature-item">
-                                <span className="feature-icon">✓</span>
-                                <span>Accessible</span>
-                              </div>
-                              <div className="feature-item">
-                                <span className="feature-icon">☀️</span>
-                                <span>Natural daylight</span>
-                              </div>
-                              <div className="feature-item">
-                                <span className="feature-icon">👁️</span>
-                                <span>Pitch view</span>
-                              </div>
-                              <div className="feature-item">
-                                <span className="feature-icon">❄️</span>
-                                <span>Air-conditioning</span>
-                              </div>
-                              <div className="feature-item">
-                                <span className="feature-icon">📺</span>
-                                <span>LED Screens</span>
-                              </div>
-                              <div className="feature-item">
-                                <span className="feature-icon">📡</span>
-                                <span>Free WIFI</span>
-                              </div>
-                              <div className="feature-item">
-                                <span className="feature-icon">🅿️</span>
-                                <span>160 parking spaces</span>
-                              </div>
-                              <div className="feature-item">
-                                <span className="feature-icon">🍸</span>
-                                <span>Bar</span>
-                              </div>
-                            </div>
-                          </div> */}
-                          
                           <button className="download-button">
                             <span className="download-icon">📥</span>
                             FLOOR PLAN DOWNLOAD
@@ -349,6 +290,12 @@ const Home = () => {
           </div>
         </div>
       </div>
+      
+      <CalendarModal 
+        isOpen={isCalendarOpen} 
+        onClose={() => setIsCalendarOpen(false)}
+        venueName={currentVenue.title}
+      />
     </div>
   );
 };
