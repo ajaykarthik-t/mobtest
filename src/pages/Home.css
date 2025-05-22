@@ -173,10 +173,12 @@
 }
 
 .book-button:hover, .book-button.hover {
-  background-color: #111829; /* Darker shade of #18203C on hover */
+  background-color: #072264; 
   transform: translateY(-3px);
-  box-shadow: 0 8px 15px rgba(24, 32, 60, 0.4); /* Updated shadow color */
+  box-shadow: 0 8px 15px rgba(24, 32, 60, 0.4); 
+  color: #ffffff; 
 }
+
 
 /* Details Section */
 .details-section {
