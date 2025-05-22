@@ -1,16 +1,15 @@
 // src/components/CalendarModal.jsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './CalendarModal.css';
-import AddOns from './AddOns';
 
 const CalendarModal = ({ isOpen, onClose, venueName }) => {
+  const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
-  const [step, setStep] = useState(1); // 1: Date selection, 2: Time selection, 3: Review & checkout
-  const [isAddOnsOpen, setIsAddOnsOpen] = useState(false);
-  const [addOnsData, setAddOnsData] = useState(null);
+  const [step, setStep] = useState(1); // 1: Date selection, 2: Time selection
   
   // Hardcoded available dates with different availability statuses
   const availableDates = [
@@ -93,8 +92,6 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
       setEndTime('');
       setStep(1);
       setCurrentDate(new Date());
-      setIsAddOnsOpen(false);
-      setAddOnsData(null);
     }
   }, [isOpen]);
   
@@ -244,54 +241,36 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
     if (step === 1 && selectedDate) {
       setStep(2);
     } else if (step === 2 && startTime && endTime && calculateDuration() > 0) {
-      setIsAddOnsOpen(true);
+      // Navigate to AddOns page with booking data
+      const bookingData = {
+        venueName,
+        selectedDate,
+        startTime,
+        endTime,
+        duration: calculateDuration(),
+        basePrice: calculatePrice()
+      };
+      
+      // Close the modal first
+      onClose();
+      
+      // Navigate to AddOns page with state
+      navigate('/add-services', { state: bookingData });
     }
   };
   
   const goToPreviousStep = () => {
-    if (step === 3) {
-      // If we're on review step, go back to time selection (step 2)
-      // The add-ons modal will be reopened when user clicks "Add Services" again
-      setStep(2);
-      setAddOnsData(null); // Clear add-ons data when going back
-    } else if (step > 1) {
+    if (step > 1) {
       setStep(step - 1);
     }
   };
   
-  // Handle add-ons confirmation
-  const handleAddOnsConfirm = (data) => {
-    setAddOnsData(data);
-    setIsAddOnsOpen(false);
-    setStep(3); // Go to review step after add-ons
-  };
-
-  // Handle add-ons modal close without selection
-  const handleAddOnsClose = () => {
-    setIsAddOnsOpen(false);
-    // Stay on step 2 if user closes without selecting anything
-  };
-  
-  // Handle booking confirmation
-  const handleConfirmBooking = () => {
+  // Handle booking without add-ons (quick book)
+  const handleQuickBook = () => {
     const duration = calculateDuration();
-    const totalPrice = addOnsData ? addOnsData.totalCost : calculatePrice();
+    const totalPrice = calculatePrice();
     
-    let confirmationMessage = `Booking Confirmed!\n\nVenue: ${venueName}\nDate: ${selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}\nTime: ${startTime} - ${endTime}\nDuration: ${duration} hours`;
-    
-    if (addOnsData) {
-      confirmationMessage += `\nGuests: ${addOnsData.guestCount}`;
-      
-      if (addOnsData.addOnsCost > 0) {
-        confirmationMessage += `\nAdd-ons: £${addOnsData.addOnsCost.toFixed(2)}`;
-      }
-      
-      if (addOnsData.catering) {
-        confirmationMessage += `\nCatering: ${addOnsData.catering.packageDetails.name} (£${addOnsData.cateringCost.toFixed(2)})`;
-      }
-    }
-    
-    confirmationMessage += `\nTotal Price: £${totalPrice.toFixed(2)}\n\nThank you for your booking!`;
+    let confirmationMessage = `Booking Confirmed!\n\nVenue: ${venueName}\nDate: ${selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}\nTime: ${startTime} - ${endTime}\nDuration: ${duration} hours\nTotal Price: £${totalPrice.toFixed(2)}\n\nThank you for your booking!`;
     
     alert(confirmationMessage);
     onClose();
@@ -321,7 +300,6 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
             <h2 className="modal-title">
               {step === 1 && 'Select Date'}
               {step === 2 && 'Select Time'}
-              {step === 3 && 'Review & Checkout'}
             </h2>
             <h3 className="venue-name">{venueName}</h3>
             
@@ -330,8 +308,6 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
               <div className={`step ${step >= 1 ? 'active' : ''}`}>1</div>
               <div className={`step-line ${step >= 2 ? 'active' : ''}`}></div>
               <div className={`step ${step >= 2 ? 'active' : ''}`}>2</div>
-              <div className={`step-line ${step >= 3 ? 'active' : ''}`}></div>
-              <div className={`step ${step >= 3 ? 'active' : ''}`}>3</div>
             </div>
           </div>
           
@@ -439,63 +415,6 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
               )}
             </div>
           )}
-          
-          {/* Step 3: Review & Checkout */}
-          {step === 3 && (
-            <div className="booking-review">
-              <h4>Booking Summary</h4>
-              <div className="booking-details">
-                <div className="detail-row">
-                  <span className="detail-label">Venue:</span>
-                  <span className="detail-value">{venueName}</span>
-                </div>
-                <div className="detail-row">
-                  <span className="detail-label">Date:</span>
-                  <span className="detail-value">{selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                </div>
-                <div className="detail-row">
-                  <span className="detail-label">Time:</span>
-                  <span className="detail-value">{startTime} - {endTime}</span>
-                </div>
-                <div className="detail-row">
-                  <span className="detail-label">Duration:</span>
-                  <span className="detail-value">{calculateDuration()} hours</span>
-                </div>
-                <div className="detail-row">
-                  <span className="detail-label">Base Rate:</span>
-                  <span className="detail-value">£{HOURLY_RATE}/hour</span>
-                </div>
-                
-                {addOnsData && (
-                  <>
-                    <div className="detail-row">
-                      <span className="detail-label">Guests:</span>
-                      <span className="detail-value">{addOnsData.guestCount}</span>
-                    </div>
-                    
-                    {addOnsData.addOnsCost > 0 && (
-                      <div className="detail-row">
-                        <span className="detail-label">Add-ons & Services:</span>
-                        <span className="detail-value">£{addOnsData.addOnsCost.toFixed(2)}</span>
-                      </div>
-                    )}
-                    
-                    {addOnsData.catering && (
-                      <div className="detail-row">
-                        <span className="detail-label">Catering:</span>
-                        <span className="detail-value">{addOnsData.catering.packageDetails.name} (£{addOnsData.cateringCost.toFixed(2)})</span>
-                      </div>
-                    )}
-                  </>
-                )}
-                
-                <div className="detail-row total">
-                  <span className="detail-label">Total Price:</span>
-                  <span className="detail-value">£{addOnsData ? addOnsData.totalCost.toFixed(2) : calculatePrice().toFixed(2)}</span>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
         
         {/* Modal Actions */}
@@ -510,39 +429,28 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
             Cancel
           </button>
           
-          {step < 3 ? (
+          {step === 1 ? (
             <button 
               className="next-button" 
-              disabled={
-                (step === 1 && !selectedDate) || 
-                (step === 2 && (!startTime || !endTime || calculateDuration() <= 0))
-              }
+              disabled={!selectedDate}
               onClick={goToNextStep}
             >
-              {step === 2 ? 'Add Services' : 'Next'}
+              Next
             </button>
           ) : (
-            <button 
-              className="confirm-button" 
-              onClick={handleConfirmBooking}
-            >
-              Confirm Booking
-            </button>
+            <>
+
+              <button 
+                className="add-services-button" 
+                disabled={!startTime || !endTime || calculateDuration() <= 0}
+                onClick={goToNextStep}
+              >
+                Add Services
+              </button>
+            </>
           )}
         </div>
       </div>
-      
-      <AddOns
-        isOpen={isAddOnsOpen}
-        onClose={handleAddOnsClose}
-        onConfirm={handleAddOnsConfirm}
-        venueName={venueName}
-        selectedDate={selectedDate}
-        startTime={startTime}
-        endTime={endTime}
-        duration={calculateDuration()}
-        basePrice={calculatePrice()}
-      />
     </div>
   );
 };

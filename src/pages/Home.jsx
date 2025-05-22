@@ -1,16 +1,11 @@
 // src/pages/Home.jsx
 import React, { useState, useEffect } from 'react';
 import './Home.css';
-import CalendarModal from '../components/CalandarModal';
+import CalendarModal from '../components/CalendarModal'; // Fixed typo: CalandarModal -> CalendarModal
 
 // Import images from your folders
+import ledStudioImage from '../assets/images/venues/LedStudio.webp';
 import dinnerImage from '../assets/images/venues/dinner.jpeg';
-import exhibitionImage from '../assets/images/venues/exhibition.jpg';
-import classroomImage from '../assets/images/venues/classroom.jpg';
-import receptionImage from '../assets/images/venues/reception.jpg';
-import theatreImage from '../assets/images/venues/Theatre.jpg';
-import cabaretImage from '../assets/images/venues/cararet.jpeg';
-import dinnerDanceImage from '../assets/images/venues/dinner-dance.jpg';
 import floorplanImage from '../assets/images/floor-plans/floorplan.webp';
 
 const Home = () => {
@@ -21,11 +16,39 @@ const Home = () => {
   // Event venue details for each category
   const eventVenues = [
     {
+      id: 'led-studio',
+      title: 'LED Studio Lounge',
+      category: 'Multi-Purpose',
+      description: 'Whether you\'re planning a conference, awards ceremony, or wedding, our spacious suite can accommodate up to 350 guests. With stunning views of the historic Wakefield Trinity pitch, the LED Studio Lounge provides a unique and memorable setting that will make your event truly extraordinary.',
+      capacity: {
+        dinner: 250,
+        dinnerDance: 210,
+        reception: 350,
+        theatre: 300,
+        cabaret: 200,
+        boardroom: 64,
+        uShape: 70
+      },
+      // Fixed: Added capacity display property for consistency
+      capacityDisplay: '350 capacity',
+      view: 'Pitch view',
+      roomConditions: ['Accessible', 'Natural Daylight', 'Air Conditioning', 'Stadium Access'],
+      connectivity: ['Free WIFI', 'PA System', '2 Microphones', 'LED Screens', 'Fixed Bar', 'Stage'],
+      dimensions: {
+        length: '27m',
+        width: '11.7x17.4m',
+        height: '4.5m'
+      },
+      size: '315m²',
+      additionalFeatures: ['160 Parking Spaces'],
+      imagePath: ledStudioImage
+    },
+    {
       id: 'dinner',
       title: 'Howard Suite Dinner',
       category: 'Dinner',
       description: 'Wow guests at your next dinner, charity function or black tie event with the Howard Suite Dinner. The only suite in the world to overlook two international stadia, with uninterrupted views from towering windows. With award-winning catering and space to accommodate up to 450 guests, your dinner will be one to remember.',
-      capacity: '450 capacity',
+      capacityDisplay: '450 capacity', // Fixed: Changed from capacity to capacityDisplay for consistency
       view: 'View of both stadia',
       roomConditions: ['Natural Daylight', 'Air Conditioning'],
       connectivity: ['Portable', 'Portable Projector', '10 plasma screens'],
@@ -36,108 +59,6 @@ const Home = () => {
       },
       size: '471m²',
       imagePath: dinnerImage
-    },
-    {
-      id: 'exhibition',
-      title: 'Grand Exhibition Hall',
-      category: 'Exhibition',
-      description: 'Our spacious Exhibition Hall provides the perfect backdrop for showcasing art, products, or industry exhibitions. With flexible floor space and excellent lighting, your exhibition will captivate visitors and create lasting impressions.',
-      capacity: '600 capacity',
-      view: 'Garden view',
-      roomConditions: ['Natural Daylight', 'Air Conditioning', 'Configurable Lighting'],
-      connectivity: ['Wi-Fi', 'Digital displays', '8 plasma screens'],
-      dimensions: {
-        length: '50.2m',
-        width: '18.7m',
-        height: '4.5m'
-      },
-      size: '938m²',
-      imagePath: exhibitionImage
-    },
-    {
-      id: 'classroom',
-      title: 'Learning Center',
-      category: 'Classroom',
-      description: 'Our professional Learning Center offers the ideal environment for training sessions, workshops, and educational events. With a classroom-style setup, modern technology, and comfortable seating, attendees can focus on learning in this purpose-built space.',
-      capacity: '120 capacity',
-      view: 'City skyline',
-      roomConditions: ['Natural Daylight', 'Air Conditioning', 'Acoustic Panels'],
-      connectivity: ['Interactive whiteboard', 'Video conferencing', '6 monitors'],
-      dimensions: {
-        length: '18.3m',
-        width: '12.1m',
-        height: '3.0m'
-      },
-      size: '221m²',
-      imagePath: classroomImage
-    },
-    {
-      id: 'reception',
-      title: 'Atrium Reception Hall',
-      category: 'Reception',
-      description: 'Make a stunning first impression with our Atrium Reception Hall. Perfect for welcome events, networking, and cocktail receptions. The grand architecture and elegant atmosphere set the stage for meaningful connections and memorable interactions.',
-      capacity: '350 capacity',
-      view: 'Atrium view',
-      roomConditions: ['Natural Daylight', 'Climate Control', 'Ambient Lighting'],
-      connectivity: ['Sound system', 'Wireless presentations', '4 digital signage screens'],
-      dimensions: {
-        length: '32.8m',
-        width: '15.4m',
-        height: '6.2m'
-      },
-      size: '505m²',
-      imagePath: receptionImage
-    },
-    {
-      id: 'theatre',
-      title: 'Premier Auditorium',
-      category: 'Theatre',
-      description: 'Our state-of-the-art auditorium provides the perfect setting for presentations, performances, and lectures. With tiered seating, excellent acoustics, and professional lighting, your audience will enjoy an immersive experience from every seat.',
-      capacity: '280 capacity',
-      view: 'Internal',
-      roomConditions: ['Professional Lighting', 'Climate Control', 'Acoustic Design'],
-      connectivity: ['Professional AV system', 'Recording capability', 'Stage monitors'],
-      dimensions: {
-        length: '28.5m',
-        width: '22.3m',
-        height: '7.2m'
-      },
-      size: '635m²',
-      imagePath: theatreImage
-    },
-    {
-      id: 'cabaret',
-      title: 'Starlight Cabaret',
-      category: 'Cabaret',
-      description: 'Experience the magic of our Starlight Cabaret venue. Designed for entertainment events with a touch of glamour, this versatile space can host performances, themed parties, and sophisticated gatherings where style meets substance.',
-      capacity: '200 capacity',
-      view: 'Night skyline',
-      roomConditions: ['Adjustable Lighting', 'Climate Control', 'Sound Insulation'],
-      connectivity: ['Performance sound system', 'Stage lighting', 'Projection capabilities'],
-      dimensions: {
-        length: '24.8m',
-        width: '18.6m',
-        height: '4.8m'
-      },
-      size: '461m²',
-      imagePath: cabaretImage
-    },
-    {
-      id: 'dinner-dance',
-      title: 'Celebration Ballroom',
-      category: 'Dinner & Dance',
-      description: 'Our elegant Celebration Ballroom is the perfect venue for your dinner and dance event. With a spacious dance floor, sophisticated dining area, and state-of-the-art audio-visual facilities, your guests will enjoy an unforgettable evening of dining and dancing.',
-      capacity: '320 capacity',
-      view: 'Garden terrace',
-      roomConditions: ['Dimmable Lighting', 'Climate Control', 'Dance Floor'],
-      connectivity: ['DJ booth', 'Light show capabilities', 'Premium sound system'],
-      dimensions: {
-        length: '36.2m',
-        width: '22.5m',
-        height: '5.3m'
-      },
-      size: '815m²',
-      imagePath: dinnerDanceImage
     }
   ];
 
@@ -173,6 +94,8 @@ const Home = () => {
     if (condition === 'Acoustic Panels' || condition === 'Acoustic Design' || condition === 'Sound Insulation') return '🔊';
     if (condition === 'Dance Floor') return '💃';
     if (condition === 'Ambient Lighting') return '✨';
+    if (condition === 'Accessible') return '♿';
+    if (condition === 'Stadium Access') return '🏟️';
     return '•';
   };
 
@@ -180,11 +103,14 @@ const Home = () => {
     if (item === 'Portable' || item.includes('Interactive whiteboard')) return '🖥️';
     if (item === 'Portable Projector' || item.includes('Projection')) return '📽️';
     if (item.includes('plasma') || item.includes('monitors') || item.includes('screens')) return '📺';
-    if (item.includes('Wi-Fi')) return '📶';
-    if (item.includes('Sound') || item.includes('DJ')) return '🎵';
+    if (item.includes('Wi-Fi') || item.includes('WIFI')) return '📶';
+    if (item.includes('Sound') || item.includes('DJ') || item.includes('PA System')) return '🎵';
     if (item.includes('Video conferencing')) return '📹';
     if (item.includes('Recording')) return '🎙️';
-    if (item.includes('Light show')) return '🎆';
+    if (item.includes('Light show') || item.includes('LED Screens')) return '🎆';
+    if (item.includes('Microphones')) return '🎤';
+    if (item.includes('Bar')) return '🍸';
+    if (item.includes('Stage')) return '🎭';
     return '•';
   };
 
@@ -212,12 +138,16 @@ const Home = () => {
                 src={venue.imagePath}
                 alt={venue.title}
                 className="hero-image"
+                onError={(e) => {
+                  console.error(`Failed to load image: ${venue.imagePath}`);
+                  e.target.style.display = 'none';
+                }}
               />
               <div className="hero-overlay">
                 <div className="category-badge">{venue.category}</div>
                 <h2 className="venue-title">{venue.title}</h2>
                 <div className="venue-badges">
-                  <span className="venue-badge">{venue.capacity}</span>
+                  <span className="venue-badge">{venue.capacityDisplay}</span>
                   <span className="venue-badge">{venue.view}</span>
                 </div>
               </div>
@@ -254,7 +184,7 @@ const Home = () => {
                       <tr>
                         <td data-label="ROOM CONDITIONS">
                           <ul className="table-list">
-                            {venue.roomConditions.map((condition, index) => (
+                            {venue.roomConditions && venue.roomConditions.map((condition, index) => (
                               <li key={index} className="table-list-item">
                                 <span className="table-icon">
                                   {getIconForCondition(condition)}
@@ -266,7 +196,7 @@ const Home = () => {
                         </td>
                         <td data-label="CONNECTIVITY">
                           <ul className="table-list">
-                            {venue.connectivity.map((item, index) => (
+                            {venue.connectivity && venue.connectivity.map((item, index) => (
                               <li key={index} className="table-list-item">
                                 <span className="table-icon">
                                   {getIconForConnectivity(item)}
@@ -303,6 +233,10 @@ const Home = () => {
                                 src={floorplanImage} 
                                 alt="Chairman's Lounge Floor Plan" 
                                 className="floorplan-image"
+                                onError={(e) => {
+                                  console.error(`Failed to load floorplan image: ${floorplanImage}`);
+                                  e.target.style.display = 'none';
+                                }}
                               />
                             </div>
                             

@@ -50,7 +50,7 @@
 /* Page Header Section */
 .page-header {
   background: var(--gradient-primary);
-  padding: 100px 0 80px 0;
+  padding: 80px 0 60px 0;
   text-align: center;
   color: var(--text-primary);
   margin-bottom: 0;
@@ -293,9 +293,9 @@
 
 /* Details Section - Enhanced Layout */
 .details-section {
-  width: 100%;         /* or something like 90%, depending on how small you want it */
-  margin: 0 auto;     /* centers it */
-  overflow: hidden;   /* hides scrollbars */
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
@@ -307,6 +307,7 @@
   position: relative;
   padding-bottom: 20px;
   letter-spacing: -0.01em;
+  margin-bottom: 40px;
 }
 
 .details-title::after {
@@ -321,7 +322,7 @@
   border-radius: 2px;
 }
 
-/* Table Styling - Complete Redesign */
+/* Table Styling - Fixed Alignment */
 .details-table-container {
   width: 100%;
   overflow-x: auto;
@@ -338,6 +339,7 @@
   border-spacing: 0;
   color: var(--text-secondary);
   background: transparent;
+  table-layout: fixed;
 }
 
 .details-table thead {
@@ -345,7 +347,7 @@
 }
 
 .details-table th {
-  padding: 28px 32px;
+  padding: 28px 24px;
   text-align: left;
   font-weight: 700;
   font-size: 14px;
@@ -353,12 +355,17 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   border-bottom: 2px solid var(--accent);
-  white-space: nowrap;
   background: var(--primary);
+  position: relative;
 }
 
+.details-table th:nth-child(1) { width: 22%; }
+.details-table th:nth-child(2) { width: 22%; }
+.details-table th:nth-child(3) { width: 22%; }
+.details-table th:nth-child(4) { width: 34%; }
+
 .details-table td {
-  padding: 32px;
+  padding: 32px 24px;
   background: var(--bg-tertiary);
   vertical-align: top;
   border-bottom: 1px solid var(--border-muted);
@@ -374,38 +381,41 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .table-list-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   font-size: 15px;
   font-weight: 500;
-  padding: 8px 0;
+  padding: 6px 0;
   color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 .table-icon {
-  margin-right: 16px;
-  font-size: 20px;
-  width: 28px;
+  margin-right: 12px;
+  font-size: 16px;
+  width: 20px;
   text-align: center;
   filter: grayscale(0.3);
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
-/* Dimensions Styling */
+/* Dimensions Styling - Fixed Layout */
 .dimensions-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .dimensions-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--border-muted);
 }
 
@@ -416,47 +426,52 @@
 .dimensions-label {
   font-weight: 600;
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  flex: 1;
 }
 
 .dimensions-value {
   font-weight: 700;
   color: var(--text-primary);
-  font-size: 16px;
+  font-size: 15px;
+  text-align: right;
+  flex-shrink: 0;
 }
 
 .total-size {
-  margin-top: 16px;
-  padding-top: 20px;
+  margin-top: 12px;
+  padding: 16px 12px 12px 12px;
   border-top: 2px solid var(--accent) !important;
   background: rgba(79, 158, 255, 0.05);
   border-radius: 8px;
-  padding: 20px 16px 16px 16px;
+  border-bottom: none !important;
 }
 
 .size-highlight {
   color: var(--accent);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
 }
 
-/* Floor Plan Styling */
+/* Floor Plan Styling - Fixed Layout */
 .floorplan-cell {
-  width: 350px;
-  min-width: 350px;
+  width: 34%;
+  min-width: 320px;
+  vertical-align: top;
 }
 
 .floorplan-content {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 100%;
 }
 
 .floorplan-image-container {
   width: 100%;
-  height: 180px;
+  height: 160px;
   overflow: hidden;
   border-radius: 12px;
   background: var(--bg-accent);
@@ -474,9 +489,15 @@
   transform: scale(1.05);
 }
 
-.floorplan-details h4 {
-  margin: 0 0 12px 0;
-  font-size: 18px;
+.floorplan-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chairmans-title {
+  margin: 0 0 8px 0;
+  font-size: 16px;
   color: var(--accent);
   font-weight: 700;
   text-transform: uppercase;
@@ -484,18 +505,19 @@
 }
 
 .chairmans-subtitle {
-  margin: 0 0 16px 0;
-  font-size: 13px;
+  margin: 0 0 12px 0;
+  font-size: 12px;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .chairmans-description {
-  margin: 0 0 20px 0;
-  font-size: 14px;
-  line-height: 1.6;
+  margin: 0 0 16px 0;
+  font-size: 13px;
+  line-height: 1.5;
   color: var(--text-secondary);
+  flex: 1;
 }
 
 /* Download Button */
@@ -508,14 +530,15 @@
   background: rgba(79, 158, 255, 0.1);
   border: 2px solid var(--accent);
   border-radius: 8px;
-  padding: 14px 18px;
+  padding: 12px 16px;
   cursor: pointer;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
   width: 100%;
+  margin-top: auto;
 }
 
 .download-button:hover {
@@ -526,12 +549,19 @@
 }
 
 .download-icon {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Enhanced scroll animations */
@@ -558,6 +588,11 @@ html {
     padding: 50px 40px;
     gap: 40px;
   }
+  
+  .details-table th,
+  .details-table td {
+    padding: 24px 20px;
+  }
 }
 
 @media (max-width: 992px) {
@@ -581,13 +616,12 @@ html {
   
   .details-table th,
   .details-table td {
-    padding: 24px 20px;
+    padding: 20px 16px;
     font-size: 14px;
   }
   
   .floorplan-cell {
-    width: 300px;
-    min-width: 300px;
+    min-width: 280px;
   }
 }
 
@@ -640,83 +674,34 @@ html {
   }
   
   /* Mobile table responsiveness */
+  .details-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
   .details-table {
-    display: block;
-    box-shadow: none;
+    min-width: 600px;
   }
   
-  .details-table thead {
-    display: none;
-  }
-  
-  .details-table tbody,
-  .details-table tr {
-    display: block;
-    width: 100%;
-  }
-  
+  .details-table th,
   .details-table td {
-    display: block;
-    width: 100%;
-    text-align: left;
-    position: relative;
-    padding-left: 50%;
-    box-sizing: border-box;
-    border-bottom: 1px solid var(--border-muted);
-    background: var(--bg-tertiary);
-    margin-bottom: 20px;
-    border-radius: 12px;
-    min-height: 80px;
-  }
-  
-  .details-table td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 16px;
-    top: 16px;
-    width: 45%;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 12px;
-    color: var(--accent);
-    letter-spacing: 0.5px;
+    padding: 16px 12px;
+    font-size: 13px;
   }
   
   .floorplan-cell {
-    width: 100%;
-    min-width: auto;
-    padding-left: 16px !important;
-  }
-  
-  .floorplan-content {
-    flex-direction: row;
-    gap: 16px;
+    min-width: 240px;
   }
   
   .floorplan-image-container {
-    width: 120px;
-    height: 100px;
-    flex-shrink: 0;
-  }
-  
-  .floorplan-details {
-    flex: 1;
+    height: 120px;
   }
   
   .dimensions-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    flex-direction: row;
+    justify-content: space-between;
   }
 }
-
- html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  width: 100%;
-  }
-
 
 @media (max-width: 480px) { 
   .home-page {
@@ -770,6 +755,51 @@ html {
     font-size: 14px;
   }
   
+  .details-table {
+    display: block;
+  }
+  
+  .details-table thead,
+  .details-table tbody,
+  .details-table th,
+  .details-table td,
+  .details-table tr {
+    display: block;
+  }
+  
+  .details-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  
+  .details-table tr {
+    border: 1px solid var(--border-muted);
+    margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .details-table td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  
+  .details-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 16px;
+    width: 45%;
+    top: 16px;
+    font-weight: bold;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  
   .floorplan-content {
     flex-direction: column;
     gap: 12px;
@@ -781,8 +811,8 @@ html {
   }
   
   .details-section {
-    width: 100%;       /* or 95% if you want it narrower */
-    padding: 10px;     /* optional: make padding smaller on mobile */
+    width: 100%;
+    padding: 10px;
     overflow-x: hidden;
   }
 }
