@@ -424,30 +424,102 @@ const AddOns = ({
             </div>
           </div>
 
-          {/* Cost Summary */}
+         {/* Cost Summary */}
           <div className="cost-summary">
             <h4>Cost Summary</h4>
             <div className="cost-breakdown">
-              <div className="cost-line">
-                <span>Venue Rental:</span>
-                <span>£{basePrice.toFixed(2)}</span>
+              {/* Base Venue Cost */}
+              <div className="cost-section">
+                <div className="cost-line main-item">
+                  <div className="cost-description">
+                    <span>Venue Rental</span>
+                    <div className="cost-details">{duration} hours × £{basePrice/duration}/hour</div>
+                  </div>
+                  <span className="cost-amount">£{basePrice.toFixed(2)}</span>
+                </div>
               </div>
-              {calculateAddOnsCost() > 0 && (
-                <div className="cost-line">
-                  <span>Add-ons & Services:</span>
-                  <span>£{calculateAddOnsCost().toFixed(2)}</span>
+
+              {/* Add-ons Section */}
+              {Object.keys(selectedAddOns).length > 0 && (
+                <div className="cost-section">
+                  <div className="cost-section-title">Add-ons & Services</div>
+                  {Object.values(selectedAddOns).map((addOn, index) => (
+                    <div key={index} className="cost-line sub-item">
+                      <div className="cost-description">
+                        <span>{addOn.item.name}</span>
+                        {addOn.quantity > 1 && (
+                          <div className="cost-details">{addOn.quantity} × £{addOn.item.price}</div>
+                        )}
+                      </div>
+                      <span className="cost-amount">£{(addOn.item.price * addOn.quantity).toFixed(2)}</span>
+                    </div>
+                  ))}
+                  <div className="cost-line subtotal">
+                    <span>Add-ons Subtotal:</span>
+                    <span className="cost-amount">£{calculateAddOnsCost().toFixed(2)}</span>
+                  </div>
                 </div>
               )}
-              {calculateCateringCost() > 0 && (
-                <div className="cost-line">
-                  <span>Catering ({guestCount} guests):</span>
-                  <span>£{calculateCateringCost().toFixed(2)}</span>
+
+              {/* Catering Section */}
+              {selectedCatering && (
+                <div className="cost-section">
+                  <div className="cost-section-title">Catering</div>
+                  <div className="cost-line sub-item">
+                    <div className="cost-description">
+                      <span>{cateringPackages[selectedCatering].name}</span>
+                      <div className="cost-details">{guestCount} guests × £{cateringPackages[selectedCatering].pricePerPerson}</div>
+                    </div>
+                    <span className="cost-amount">£{(cateringPackages[selectedCatering].pricePerPerson * guestCount).toFixed(2)}</span>
+                  </div>
+                  
+                  {/* Menu Add-ons */}
+                  {Object.entries(selectedMenuItems).map(([itemId, selected]) => {
+                    if (!selected) return null;
+                    const item = cateringPackages[selectedCatering].items.find(item => item.id === itemId);
+                    if (!item || !item.price) return null;
+                    return (
+                      <div key={itemId} className="cost-line sub-item">
+                        <div className="cost-description">
+                          <span>{item.name}</span>
+                          <div className="cost-details">{guestCount} guests × £{item.price}</div>
+                        </div>
+                        <span className="cost-amount">£{(item.price * guestCount).toFixed(2)}</span>
+                      </div>
+                    );
+                  })}
+                  
+                  <div className="cost-line subtotal">
+                    <span>Catering Subtotal:</span>
+                    <span className="cost-amount">£{calculateCateringCost().toFixed(2)}</span>
+                  </div>
                 </div>
               )}
+
+              {/* Empty state for no add-ons */}
+              {Object.keys(selectedAddOns).length === 0 && !selectedCatering && (
+                <div className="empty-state">
+                  No additional services selected
+                </div>
+              )}
+
+              {/* Total */}
               <div className="cost-line total">
-                <span>Total Cost:</span>
-                <span>£{calculateTotalCost().toFixed(2)}</span>
+                <div className="cost-description">
+                  <span>Total Amount</span>
+                  <div className="cost-details">Including all services for {guestCount} guest{guestCount !== 1 ? 's' : ''}</div>
+                </div>
+                <span className="cost-amount">£{calculateTotalCost().toFixed(2)}</span>
               </div>
+
+              {/* Savings indicator if applicable */}
+              {(calculateAddOnsCost() > 500 || calculateCateringCost() > 1000) && (
+                <div className="cost-savings">
+                  <p className="savings-text">
+                    🎉 Great choice! You're getting premium services for your event.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
