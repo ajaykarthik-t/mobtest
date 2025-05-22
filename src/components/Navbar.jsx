@@ -1,61 +1,54 @@
-// src/components/Navbar.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import logo from '../assets/icons/logo.webp';
+import './Navbar.css'; 
 
 const Navbar = () => {
   const location = useLocation();
-  
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const controlNavbar = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < lastScrollY || currentScrollY < 10) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', controlNavbar);
+    return () => window.removeEventListener('scroll', controlNavbar);
+  }, [lastScrollY]);
+
   return (
-    <nav className="navbar">
-      {/* Top section - White/Light background */}
+    <nav className={`navbar ${isVisible ? 'navbar-visible' : 'navbar-hidden'}`}>
+      {/* Top section */}
       <div className="navbar-top">
         <Link to="/" className="navbar-brand">
           <div className="brand-logo">
-            {/* You can add your logo here */}
-            {/* <span className="logo-placeholder">🏆</span> */}
+            <img src={logo} alt="Logo" className="logo-image" />
           </div>
-          <span className="brand-text">React Demo App</span>
         </Link>
         <div className="navbar-actions">
-          {/* Additional actions like search, user menu, etc. */}
-          <button className="navbar-action-btn"></button>
-          <button className="navbar-action-btn">☰</button>
+          <button className="navbar-action-btn" aria-label="Open menu">☰</button>
         </div>
       </div>
-      
-      {/* Bottom section - Red background */}
+
+      {/* Bottom section */}
       <div className="navbar-bottom">
         <div className="navbar-links">
-          <Link 
-            to="/" 
-            className={`navbar-link ${location.pathname === '/' ? 'active' : ''}`}
-          >
-            HOME
-          </Link>
-          <Link 
-            to="/about" 
-            className={`navbar-link ${location.pathname === '/about' ? 'active' : ''}`}
-          >
-            ABOUT
-          </Link>
-          <Link 
-            to="/services" 
-            className={`navbar-link ${location.pathname === '/services' ? 'active' : ''}`}
-          >
-            SERVICES
-          </Link>
-          <Link 
-            to="/contact" 
-            className={`navbar-link ${location.pathname === '/contact' ? 'active' : ''}`}
-          >
-            CONTACT
-          </Link>
-          <Link 
-            to="/events" 
-            className={`navbar-link ${location.pathname === '/events' ? 'active' : ''}`}
-          >
-            EVENTS
-          </Link>
+          <Link to="/" className={`navbar-link ${location.pathname === '/' ? 'active' : ''}`}>HOME</Link>
+          <Link to="/partner-offers" className={`navbar-link ${location.pathname === '/partner-offers' ? 'active' : ''}`}>Partner Offers</Link>
+          <Link to="/commercial" className={`navbar-link ${location.pathname === '/commercial' ? 'active' : ''}`}>Commercial</Link>
+          <Link to="/shop" className={`navbar-link ${location.pathname === '/shop' ? 'active' : ''}`}>Shop</Link>
+          <Link to="/tickets" className={`navbar-link ${location.pathname === '/tickets' ? 'active' : ''}`}>Tickets</Link>
+          <Link to="/match-hospitality" className={`navbar-link ${location.pathname === '/match-hospitality' ? 'active' : ''}`}>Match Hospitality</Link>
+          <Link to="/events" className={`navbar-link ${location.pathname === '/events' ? 'active' : ''}`}>Events</Link>
         </div>
       </div>
     </nav>

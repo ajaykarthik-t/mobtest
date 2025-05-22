@@ -293,9 +293,10 @@
 
 /* Details Section - Enhanced Layout */
 .details-section {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+  width: 100%;         /* or something like 90%, depending on how small you want it */
+  margin: 0 auto;     /* centers it */
+  overflow: hidden;   /* hides scrollbars */
+  box-sizing: border-box;
 }
 
 .details-title {
@@ -709,7 +710,15 @@ html {
   }
 }
 
-@media (max-width: 480px) {
+ html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  }
+
+
+@media (max-width: 480px) { 
   .home-page {
     padding-top: 60px;
   }
@@ -769,5 +778,11 @@ html {
   .floorplan-image-container {
     width: 100%;
     height: 120px;
+  }
+  
+  .details-section {
+    width: 100%;       /* or 95% if you want it narrower */
+    padding: 10px;     /* optional: make padding smaller on mobile */
+    overflow-x: hidden;
   }
 }
