@@ -137,25 +137,43 @@ const AddOns = ({
 
   if (!isOpen) return null;
 
-  // Handle add-on selection
-  const handleAddOnChange = (categoryId, itemId, quantity = 1) => {
-    setSelectedAddOns(prev => ({
-      ...prev,
-      [`${categoryId}_${itemId}`]: {
-        category: categoryId,
-        item: addOnsData[categoryId].items.find(item => item.id === itemId),
-        quantity: quantity
-      }
-    }));
-  };
-
-  // Handle add-on removal
-  const removeAddOn = (key) => {
+  // Handle add-on selection (for non-perUnit items)
+  const handleAddOnToggle = (categoryId, itemId) => {
+    const key = `${categoryId}_${itemId}`;
     setSelectedAddOns(prev => {
       const newAddOns = { ...prev };
-      delete newAddOns[key];
+      if (newAddOns[key]) {
+        delete newAddOns[key];
+      } else {
+        newAddOns[key] = {
+          category: categoryId,
+          item: addOnsData[categoryId].items.find(item => item.id === itemId),
+          quantity: 1
+        };
+      }
       return newAddOns;
     });
+  };
+
+  // Handle quantity change for perUnit items
+  const handleQuantityChange = (categoryId, itemId, quantity) => {
+    const key = `${categoryId}_${itemId}`;
+    if (quantity > 0) {
+      setSelectedAddOns(prev => ({
+        ...prev,
+        [key]: {
+          category: categoryId,
+          item: addOnsData[categoryId].items.find(item => item.id === itemId),
+          quantity: quantity
+        }
+      }));
+    } else {
+      setSelectedAddOns(prev => {
+        const newAddOns = { ...prev };
+        delete newAddOns[key];
+        return newAddOns;
+      });
+    }
   };
 
   // Handle catering package selection
@@ -170,6 +188,17 @@ const AddOns = ({
       ...prev,
       [itemId]: selected
     }));
+  };
+
+  // Check if add-on is selected
+  const isAddOnSelected = (categoryId, itemId) => {
+    return !!selectedAddOns[`${categoryId}_${itemId}`];
+  };
+
+  // Get quantity for perUnit items
+  const getAddOnQuantity = (categoryId, itemId) => {
+    const addOn = selectedAddOns[`${categoryId}_${itemId}`];
+    return addOn ? addOn.quantity : 0;
   };
 
   // Calculate total add-ons cost
@@ -287,7 +316,15 @@ const AddOns = ({
                 <h4 className="category-title">{category.title}</h4>
                 <div className="addon-items">
                   {category.items.map((item) => (
-                    <div key={item.id} className="addon-item">
+                    <div 
+                      key={item.id} 
+                      className={`addon-item ${isAddOnSelected(categoryId, item.id) ? 'selected' : ''}`}
+                      onClick={() => {
+                        if (!item.perUnit) {
+                          handleAddOnToggle(categoryId, item.id);
+                        }
+                      }}
+                    >
                       <div className="addon-item-info">
                         <h5 className="addon-item-name">{item.name}</h5>
                         <p className="addon-item-description">{item.description}</p>
@@ -298,36 +335,22 @@ const AddOns = ({
                       <div className="addon-item-controls">
                         {item.perUnit ? (
                           <div className="quantity-controls">
+                            <span className="quantity-label">Quantity:</span>
                             <input
                               type="number"
                               min="0"
                               max="100"
-                              defaultValue="0"
+                              value={getAddOnQuantity(categoryId, item.id)}
                               onChange={(e) => {
+                                e.stopPropagation();
                                 const quantity = parseInt(e.target.value) || 0;
-                                if (quantity > 0) {
-                                  handleAddOnChange(categoryId, item.id, quantity);
-                                } else {
-                                  removeAddOn(`${categoryId}_${item.id}`);
-                                }
+                                handleQuantityChange(categoryId, item.id, quantity);
                               }}
+                              onClick={(e) => e.stopPropagation()}
                               className="quantity-input"
                             />
                           </div>
-                        ) : (
-                          <button
-                            className={`addon-toggle ${selectedAddOns[`${categoryId}_${item.id}`] ? 'selected' : ''}`}
-                            onClick={() => {
-                              if (selectedAddOns[`${categoryId}_${item.id}`]) {
-                                removeAddOn(`${categoryId}_${item.id}`);
-                              } else {
-                                handleAddOnChange(categoryId, item.id);
-                              }
-                            }}
-                          >
-                            {selectedAddOns[`${categoryId}_${item.id}`] ? 'Remove' : 'Add'}
-                          </button>
-                        )}
+                        ) : null}
                       </div>
                     </div>
                   ))}
@@ -341,7 +364,11 @@ const AddOns = ({
             <h4 className="category-title">Catering Packages</h4>
             <div className="catering-packages">
               {Object.entries(cateringPackages).map(([packageId, packageData]) => (
-                <div key={packageId} className="catering-package">
+                <div 
+                  key={packageId} 
+                  className={`catering-package ${selectedCatering === packageId ? 'selected' : ''}`}
+                  onClick={() => handleCateringChange(packageId)}
+                >
                   <div className="package-header">
                     <input
                       type="radio"
@@ -350,6 +377,7 @@ const AddOns = ({
                       checked={selectedCatering === packageId}
                       onChange={() => handleCateringChange(packageId)}
                       className="package-radio"
+                      onClick={(e) => e.stopPropagation()}
                     />
                     <label htmlFor={packageId} className="package-label">
                       <h5 className="package-name">{packageData.name}</h5>
@@ -379,7 +407,11 @@ const AddOns = ({
                             <input
                               type="checkbox"
                               checked={selectedMenuItems[item.id] || false}
-                              onChange={(e) => handleMenuItemChange(item.id, e.target.checked)}
+                              onChange={(e) => {
+                                e.stopPropagation();
+                                handleMenuItemChange(item.id, e.target.checked);
+                              }}
+                              onClick={(e) => e.stopPropagation()}
                               className="menu-item-checkbox"
                             />
                           )}
