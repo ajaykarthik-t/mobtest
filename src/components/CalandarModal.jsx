@@ -1,6 +1,7 @@
 // src/components/CalendarModal.jsx
 import React, { useState, useEffect } from 'react';
 import './CalendarModal.css';
+import AddOns from './AddOns';
 
 const CalendarModal = ({ isOpen, onClose, venueName }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -8,6 +9,8 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [step, setStep] = useState(1); // 1: Date selection, 2: Time selection, 3: Review & checkout
+  const [isAddOnsOpen, setIsAddOnsOpen] = useState(false);
+  const [addOnsData, setAddOnsData] = useState(null);
   
   // Hardcoded available dates with different availability statuses
   const availableDates = [
@@ -90,6 +93,8 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
       setEndTime('');
       setStep(1);
       setCurrentDate(new Date());
+      setIsAddOnsOpen(false);
+      setAddOnsData(null);
     }
   }, [isOpen]);
   
@@ -239,22 +244,56 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
     if (step === 1 && selectedDate) {
       setStep(2);
     } else if (step === 2 && startTime && endTime && calculateDuration() > 0) {
-      setStep(3);
+      setIsAddOnsOpen(true);
     }
   };
   
   const goToPreviousStep = () => {
-    if (step > 1) {
+    if (step === 3) {
+      // If we're on review step, go back to time selection (step 2)
+      // The add-ons modal will be reopened when user clicks "Add Services" again
+      setStep(2);
+      setAddOnsData(null); // Clear add-ons data when going back
+    } else if (step > 1) {
       setStep(step - 1);
     }
+  };
+  
+  // Handle add-ons confirmation
+  const handleAddOnsConfirm = (data) => {
+    setAddOnsData(data);
+    setIsAddOnsOpen(false);
+    setStep(3); // Go to review step after add-ons
+  };
+
+  // Handle add-ons modal close without selection
+  const handleAddOnsClose = () => {
+    setIsAddOnsOpen(false);
+    // Stay on step 2 if user closes without selecting anything
   };
   
   // Handle booking confirmation
   const handleConfirmBooking = () => {
     const duration = calculateDuration();
-    const totalPrice = calculatePrice();
+    const totalPrice = addOnsData ? addOnsData.totalCost : calculatePrice();
     
-    alert(`Booking Confirmed!\n\nVenue: ${venueName}\nDate: ${selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}\nTime: ${startTime} - ${endTime}\nDuration: ${duration} hours\nTotal Price: £${totalPrice.toFixed(2)}\n\nThank you for your booking!`);
+    let confirmationMessage = `Booking Confirmed!\n\nVenue: ${venueName}\nDate: ${selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}\nTime: ${startTime} - ${endTime}\nDuration: ${duration} hours`;
+    
+    if (addOnsData) {
+      confirmationMessage += `\nGuests: ${addOnsData.guestCount}`;
+      
+      if (addOnsData.addOnsCost > 0) {
+        confirmationMessage += `\nAdd-ons: £${addOnsData.addOnsCost.toFixed(2)}`;
+      }
+      
+      if (addOnsData.catering) {
+        confirmationMessage += `\nCatering: ${addOnsData.catering.packageDetails.name} (£${addOnsData.cateringCost.toFixed(2)})`;
+      }
+    }
+    
+    confirmationMessage += `\nTotal Price: £${totalPrice.toFixed(2)}\n\nThank you for your booking!`;
+    
+    alert(confirmationMessage);
     onClose();
   };
   
@@ -423,12 +462,36 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
                   <span className="detail-value">{calculateDuration()} hours</span>
                 </div>
                 <div className="detail-row">
-                  <span className="detail-label">Rate:</span>
+                  <span className="detail-label">Base Rate:</span>
                   <span className="detail-value">£{HOURLY_RATE}/hour</span>
                 </div>
+                
+                {addOnsData && (
+                  <>
+                    <div className="detail-row">
+                      <span className="detail-label">Guests:</span>
+                      <span className="detail-value">{addOnsData.guestCount}</span>
+                    </div>
+                    
+                    {addOnsData.addOnsCost > 0 && (
+                      <div className="detail-row">
+                        <span className="detail-label">Add-ons & Services:</span>
+                        <span className="detail-value">£{addOnsData.addOnsCost.toFixed(2)}</span>
+                      </div>
+                    )}
+                    
+                    {addOnsData.catering && (
+                      <div className="detail-row">
+                        <span className="detail-label">Catering:</span>
+                        <span className="detail-value">{addOnsData.catering.packageDetails.name} (£{addOnsData.cateringCost.toFixed(2)})</span>
+                      </div>
+                    )}
+                  </>
+                )}
+                
                 <div className="detail-row total">
                   <span className="detail-label">Total Price:</span>
-                  <span className="detail-value">£{calculatePrice().toFixed(2)}</span>
+                  <span className="detail-value">£{addOnsData ? addOnsData.totalCost.toFixed(2) : calculatePrice().toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -456,7 +519,7 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
               }
               onClick={goToNextStep}
             >
-              Next
+              {step === 2 ? 'Add Services' : 'Next'}
             </button>
           ) : (
             <button 
@@ -468,6 +531,18 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
           )}
         </div>
       </div>
+      
+      <AddOns
+        isOpen={isAddOnsOpen}
+        onClose={handleAddOnsClose}
+        onConfirm={handleAddOnsConfirm}
+        venueName={venueName}
+        selectedDate={selectedDate}
+        startTime={startTime}
+        endTime={endTime}
+        duration={calculateDuration()}
+        basePrice={calculatePrice()}
+      />
     </div>
   );
 };
