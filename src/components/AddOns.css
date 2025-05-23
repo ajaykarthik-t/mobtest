@@ -117,6 +117,78 @@
   opacity: 1;
 }
 
+/* Room Arrangements Section */
+.room-arrangements-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: -0.3px;
+}
+
+.room-arrangements-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.room-arrangement-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  height: 100%;
+}
+
+.room-arrangement-card:hover {
+  border-color: rgba(0, 122, 255, 0.4);
+  background: rgba(0, 122, 255, 0.05);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.room-arrangement-card.selected {
+  border-color: #007AFF;
+  background: rgba(0, 122, 255, 0.1);
+  box-shadow: 0 8px 28px rgba(0, 122, 255, 0.3);
+}
+
+.room-arrangement-image {
+  width: 100%;
+  height: auto;
+  max-height: 120px;
+  object-fit: contain;
+  margin-bottom: 1.25rem;
+  filter: brightness(0.9) contrast(1.1);
+  transition: all 0.3s ease;
+}
+
+.room-arrangement-card.selected .room-arrangement-image {
+  filter: brightness(1) contrast(1.2);
+}
+
+.room-arrangement-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: auto;
+  transition: all 0.3s ease;
+}
+
+.room-arrangement-card.selected .room-arrangement-name {
+  color: #007AFF;
+}
+
 /* Content Layout */
 .addons-content {
   display: grid;
@@ -1274,4 +1346,116 @@
   .addon-items {
     padding: 1rem;
   }
+  
+  .room-arrangements-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    margin: 0 0 1.5rem 0;
+    letter-spacing: -0.3px;
+  }
+  
+  .room-arrangements-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    justify-content: center;
+  }
+  
+  .room-arrangement-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    height: 100%;
+  }
+  
+  .room-arrangement-card:hover {
+    border-color: rgba(0, 122, 255, 0.4);
+    background: rgba(0, 122, 255, 0.05);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+  
+  .room-arrangement-card.selected {
+    border-color: #007AFF;
+    background: rgba(0, 122, 255, 0.1);
+    box-shadow: 0 8px 28px rgba(0, 122, 255, 0.3);
+  }
+  
+  .room-arrangement-image {
+    width: 100%;
+    height: auto;
+    max-height: 120px;
+    object-fit: contain;
+    margin-bottom: 1.25rem;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .room-arrangement-card:hover .room-arrangement-image {
+    transform: scale(1.05);
+  }
+  
+  .room-arrangement-card.selected .room-arrangement-image {
+    transform: scale(1.1);
+  }
+  
+  .room-arrangement-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: auto;
+    transition: all 0.3s ease;
+  }
+  
+  /* Override to keep text color consistent on selection */
+  .room-arrangement-card.selected .room-arrangement-name {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+  
+  @media (max-width: 768px) {
+    .room-arrangements-container {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  
+    .room-arrangement-card {
+      padding: 1rem;
+    }
+  
+    .room-arrangement-image {
+      max-height: 80px;
+      margin-bottom: 1rem;
+    }
+  
+    .room-arrangement-name {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .room-arrangements-container {
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1rem;
+    }
+  
+    .room-arrangement-card {
+      padding: 1.25rem;
+    }
+  
+    .room-arrangement-image {
+      max-height: 100px;
+    }
+  }
+  
 }

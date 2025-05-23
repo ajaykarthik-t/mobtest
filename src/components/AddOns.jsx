@@ -3,6 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './AddOns.css';
 
+// Import meeting room SVGs
+import meetingRoom1 from '../assets/meetingroom-vectors/meetingroom1.svg';
+import meetingRoom2 from '../assets/meetingroom-vectors/meetingroom2.svg';
+import meetingRoom3 from '../assets/meetingroom-vectors/meetingroom3.svg';
+import meetingRoom4 from '../assets/meetingroom-vectors/meetingroom4.svg';
+import meetingRoom5 from '../assets/meetingroom-vectors/meetingroom5.svg';
+
 const AddOns = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,6 +30,18 @@ const AddOns = () => {
   const [expandedSection, setExpandedSection] = useState('equipment');
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [tempSelectedDate, setTempSelectedDate] = useState(null);
+  
+  // Meeting room arrangement state
+  const [selectedRoomArrangement, setSelectedRoomArrangement] = useState(null);
+
+  // Room arrangements data
+  const roomArrangements = [
+    { id: 1, name: 'Default Style', image: meetingRoom1 },
+    { id: 2, name: 'Theater Style', image: meetingRoom2 },
+    { id: 3, name: 'Boardroom Style', image: meetingRoom3 },
+    { id: 4, name: 'Banquet Style', image: meetingRoom4 },
+    { id: 5, name: 'U-Shape Style', image: meetingRoom5 },
+  ];
   
   // New states for time picker
   const [showTimeModal, setShowTimeModal] = useState(false);
@@ -114,6 +133,11 @@ const AddOns = () => {
     if (value === '' || parseInt(value) < 0) {
       handleQuantityChange(categoryId, itemId, 0); // Reset to 0 if empty or invalid
     }
+  };
+
+  // Handle room arrangement selection
+  const handleRoomArrangementSelect = (arrangementId) => {
+    setSelectedRoomArrangement(arrangementId);
   };
 
   // Generate time slots
@@ -313,6 +337,13 @@ const AddOns = () => {
 
   // Handle continue to checkout
   const handleContinueToCheckout = () => {
+    if (!selectedRoomArrangement) {
+      alert('Please select a room arrangement before proceeding to checkout.');
+      return;
+    }
+    
+    const selectedArrangement = roomArrangements.find(arr => arr.id === selectedRoomArrangement);
+    
     const finalBookingData = {
       venue: venueName,
       date: selectedDate,
@@ -320,6 +351,7 @@ const AddOns = () => {
       endTime: currentEndTime,
       duration: currentDuration,
       guestCount,
+      roomArrangement: selectedArrangement ? selectedArrangement.name : null,
       basePrice: (basePrice / duration) * currentDuration,
       addOns: selectedAddOns,
       catering: null,
@@ -331,6 +363,10 @@ const AddOns = () => {
     let confirmationMessage = `Booking Confirmed!\n\nVenue: ${venueName}\nDate: ${selectedDate?.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}\nTime: ${convertTo12Hour(currentStartTime)} - ${convertTo12Hour(currentEndTime)}\nDuration: ${currentDuration} hours`;
     
     confirmationMessage += `\nGuests: ${guestCount}`;
+    
+    if (selectedRoomArrangement) {
+      confirmationMessage += `\nRoom Arrangement: ${selectedArrangement.name}`;
+    }
     
     if (calculateAddOnsCost() > 0) {
       confirmationMessage += `\nServices: £${calculateAddOnsCost().toFixed(2)}`;
@@ -396,6 +432,23 @@ const AddOns = () => {
             <div className="booking-detail">
               <strong>Base Price:</strong> £{((basePrice / duration) * currentDuration).toFixed(2)}
             </div>
+          </div>
+        </div>
+
+        {/* Room Arrangement Selection */}
+        <div className="booking-summary-header">
+          <h3 className="room-arrangements-title">Select Room Arrangement</h3>
+          <div className="room-arrangements-container">
+            {roomArrangements.map((arrangement) => (
+              <div
+                key={arrangement.id}
+                className={`room-arrangement-card ${selectedRoomArrangement === arrangement.id ? 'selected' : ''}`}
+                onClick={() => handleRoomArrangementSelect(arrangement.id)}
+              >
+                <img src={arrangement.image} alt={arrangement.name} className="room-arrangement-image" />
+                <div className="room-arrangement-name">{arrangement.name}</div>
+              </div>
+            ))}
           </div>
         </div>
 
