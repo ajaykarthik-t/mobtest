@@ -10,6 +10,8 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [step, setStep] = useState(1); // 1: Date selection, 2: Time selection
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   
   // Hardcoded available dates with different availability statuses
   const availableDates = [
@@ -364,48 +366,62 @@ const CalendarModal = ({ isOpen, onClose, venueName }) => {
                 <p><strong>Selected Date:</strong> {selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
               </div>
               
-              <div className="time-inputs">
-                <div className="time-input-group">
-                  <label htmlFor="start-time">Start Time:</label>
-                  <div className="time-select-wrapper">
-                    <select 
-                      id="start-time"
-                      value={startTime} 
-                      onChange={(e) => {
-                        setStartTime(e.target.value);
-                        setEndTime(''); // Reset end time when start time changes
-                      }}
-                      className="time-select"
-                    >
-                      <option value="">Select start time</option>
+              <div className="time-inputs-modern">
+                <div className="time-input-group-modern">
+                  <label>Start Time:</label>
+                  <button
+                    type="button"
+                    className={`time-picker-btn${startTime ? ' selected' : ''}`}
+                    onClick={() => setShowStartTimePicker(true)}
+                  >
+                    {startTime ? startTime : 'Select start time'}
+                  </button>
+                  {showStartTimePicker && (
+                    <div className="time-picker-dropdown">
                       {timeSlots.map(time => (
-                        <option key={time} value={time}>{time}</option>
+                        <div
+                          key={time}
+                          className="time-picker-option"
+                          onClick={() => {
+                            setStartTime(time);
+                            setEndTime('');
+                            setShowStartTimePicker(false);
+                          }}
+                        >
+                          {time}
+                        </div>
                       ))}
-                    </select>
-                    <span className="time-select-icon">▼</span>
-                  </div>
+                    </div>
+                  )}
                 </div>
-                
-                <div className="time-input-group">
-                  <label htmlFor="end-time">End Time:</label>
-                  <div className={`time-select-wrapper ${!startTime ? 'disabled' : ''}`}>
-                    <select 
-                      id="end-time"
-                      value={endTime} 
-                      onChange={(e) => setEndTime(e.target.value)}
-                      className="time-select"
-                      disabled={!startTime}
-                    >
-                      <option value="">Select end time</option>
+                <div className="time-input-group-modern">
+                  <label>End Time:</label>
+                  <button
+                    type="button"
+                    className={`time-picker-btn${endTime ? ' selected' : ''}`}
+                    onClick={() => startTime && setShowEndTimePicker(true)}
+                    disabled={!startTime}
+                  >
+                    {endTime ? endTime : 'Select end time'}
+                  </button>
+                  {showEndTimePicker && (
+                    <div className="time-picker-dropdown">
                       {getValidEndTimes().map(time => (
-                        <option key={time} value={time}>{time}</option>
+                        <div
+                          key={time}
+                          className="time-picker-option"
+                          onClick={() => {
+                            setEndTime(time);
+                            setShowEndTimePicker(false);
+                          }}
+                        >
+                          {time}
+                        </div>
                       ))}
-                    </select>
-                    <span className="time-select-icon">▼</span>
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
-              
               {startTime && endTime && calculateDuration() > 0 && (
                 <div className="duration-display">
                   <p><strong>Duration:</strong> {calculateDuration()} hours</p>
