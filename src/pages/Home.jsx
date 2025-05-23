@@ -1,12 +1,13 @@
 // src/pages/Home.jsx
 import React, { useState, useEffect } from 'react';
 import './Home.css';
-import CalendarModal from '../components/CalendarModal'; // Fixed typo: CalandarModal -> CalendarModal
+import CalendarModal from '../components/CalendarModal';
 
 // Import images from your folders
 import ledStudioImage from '../assets/images/venues/LedStudio.webp';
 import dinnerImage from '../assets/images/venues/dinner.jpeg';
 import floorplanImage from '../assets/images/floor-plans/floorplan.webp';
+import floorplan2Image from '../assets/images/floor-plans/floorplan2.webp';
 
 const Home = () => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -17,47 +18,71 @@ const Home = () => {
   const eventVenues = [
     {
       id: 'led-studio',
-      title: 'LED Studio Lounge',
+      title: 'LED STUDIO LOUNGE',
       category: 'Multi-Purpose',
       description: 'Whether you\'re planning a conference, awards ceremony, or wedding, our spacious suite can accommodate up to 350 guests. With stunning views of the historic Wakefield Trinity pitch, the LED Studio Lounge provides a unique and memorable setting that will make your event truly extraordinary.',
-      capacity: {
-        dinner: 250,
-        dinnerDance: 210,
-        reception: 350,
-        theatre: 300,
-        cabaret: 200,
-        boardroom: 64,
-        uShape: 70
-      },
-      // Fixed: Added capacity display property for consistency
-      capacityDisplay: '350 capacity',
-      view: 'Pitch view',
-      roomConditions: ['Accessible', 'Natural Daylight', 'Air Conditioning', 'Stadium Access'],
-      connectivity: ['Free WIFI', 'PA System', '2 Microphones', 'LED Screens', 'Fixed Bar', 'Stage'],
-      dimensions: {
-        length: '27m',
-        width: '11.7x17.4m',
-        height: '4.5m'
-      },
+      subDescription: 'The LED Studio provides a professional and inviting atmosphere to make your occasion stand out.',
+      capacity: [
+        { type: 'Dinner', value: '250' },
+        { type: 'Dinner/Dance', value: '210' },
+        { type: 'Reception', value: '350' },
+        { type: 'Theatre', value: '300' },
+        { type: 'Cabaret', value: '200' },
+        { type: 'Boardroom', value: '64' },
+        { type: 'U-shape', value: '70' }
+      ],
+      features: [
+        'Accessible',
+        'Natural daylight',
+        'Air-conditioning',
+        'Pitch view',
+        'Stadium access',
+        'Stage',
+        'PA system',
+        '2 microphones',
+        'LED Screens',
+        'Free WIFI',
+        'Fixed bar',
+        '160 parking spaces'
+      ],
+      dimensions: [
+        { type: 'Length', value: '27m' },
+        { type: 'Width', value: '11.7x17.4m' },
+        { type: 'Height', value: '4.5m' }
+      ],
       size: '315m²',
-      additionalFeatures: ['160 Parking Spaces'],
+      floorplanImage: floorplanImage,
       imagePath: ledStudioImage
     },
     {
       id: 'dinner',
-      title: 'Howard Suite Dinner',
+      title: 'HOWARD SUITE DINNER',
       category: 'Dinner',
-      description: 'Wow guests at your next dinner, charity function or black tie event with the Howard Suite Dinner. The only suite in the world to overlook two international stadia, with uninterrupted views from towering windows. With award-winning catering and space to accommodate up to 450 guests, your dinner will be one to remember.',
-      capacityDisplay: '450 capacity', // Fixed: Changed from capacity to capacityDisplay for consistency
-      view: 'View of both stadia',
-      roomConditions: ['Natural Daylight', 'Air Conditioning'],
-      connectivity: ['Portable', 'Portable Projector', '10 plasma screens'],
-      dimensions: {
-        length: '47.6m',
-        width: '10.3m',
-        height: '3.1m'
-      },
-      size: '471m²',
+      description: 'Wow guests at your next dinner, charity function or black tie event with the Howard Suite Dinner. The only suite in the world to overlook two international stadia, with uninterrupted views from towering windows.',
+      subDescription: 'The Howard Suite provides a professional and inviting atmosphere to make your occasion stand out.',
+      capacity: [
+        { type: 'Reception', value: '90' },
+        { type: 'Theatre', value: '80' },
+        { type: 'Cabaret', value: '32' },
+        { type: 'Boardroom', value: '22' },
+        { type: 'U-shape', value: '30' }
+      ],
+      features: [
+        'Accessible',
+        'Natural daylight',
+        'Air-conditioning',
+        '2 touch enabled',
+        'LED screens',
+        'Free WIFI',
+        '160 parking spaces'
+      ],
+      dimensions: [
+        { type: 'Length', value: '17.5m' },
+        { type: 'Width', value: '7.6m' },
+        { type: 'Height', value: '3m' }
+      ],
+      size: '91m²',
+      floorplanImage: floorplan2Image,
       imagePath: dinnerImage
     }
   ];
@@ -86,32 +111,12 @@ const Home = () => {
     setIsCalendarOpen(true);
   };
 
-  const getIconForCondition = (condition) => {
-    if (condition === 'Natural Daylight') return '☀️';
-    if (condition === 'Air Conditioning') return '❄️';
-    if (condition === 'Climate Control') return '🌡️';
-    if (condition === 'Configurable Lighting' || condition === 'Professional Lighting' || condition === 'Adjustable Lighting' || condition === 'Dimmable Lighting') return '💡';
-    if (condition === 'Acoustic Panels' || condition === 'Acoustic Design' || condition === 'Sound Insulation') return '🔊';
-    if (condition === 'Dance Floor') return '💃';
-    if (condition === 'Ambient Lighting') return '✨';
-    if (condition === 'Accessible') return '♿';
-    if (condition === 'Stadium Access') return '🏟️';
-    return '•';
+  const handleDiningPackages = () => {
+    console.log('Dining Packages clicked');
   };
 
-  const getIconForConnectivity = (item) => {
-    if (item === 'Portable' || item.includes('Interactive whiteboard')) return '🖥️';
-    if (item === 'Portable Projector' || item.includes('Projection')) return '📽️';
-    if (item.includes('plasma') || item.includes('monitors') || item.includes('screens')) return '📺';
-    if (item.includes('Wi-Fi') || item.includes('WIFI')) return '📶';
-    if (item.includes('Sound') || item.includes('DJ') || item.includes('PA System')) return '🎵';
-    if (item.includes('Video conferencing')) return '📹';
-    if (item.includes('Recording')) return '🎙️';
-    if (item.includes('Light show') || item.includes('LED Screens')) return '🎆';
-    if (item.includes('Microphones')) return '🎤';
-    if (item.includes('Bar')) return '🍸';
-    if (item.includes('Stage')) return '🎭';
-    return '•';
+  const handleEnquireNow = () => {
+    console.log('Enquire Now clicked');
   };
 
   return (
@@ -124,7 +129,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Venue Sections */}
+      {/* Venues Container */}
       <div className="venues-container">
         {eventVenues.map((venue, index) => (
           <section 
@@ -132,132 +137,117 @@ const Home = () => {
             id={venue.id}
             className={`venue-section ${visibleSections.has(venue.id) ? 'visible' : ''}`}
           >
-            {/* Hero Image */}
-            <div className="hero-container">
-              <img 
-                src={venue.imagePath}
-                alt={venue.title}
-                className="hero-image"
-                onError={(e) => {
-                  console.error(`Failed to load image: ${venue.imagePath}`);
-                  e.target.style.display = 'none';
-                }}
-              />
-              <div className="hero-overlay">
-                <div className="category-badge">{venue.category}</div>
-                <h2 className="venue-title">{venue.title}</h2>
-                <div className="venue-badges">
-                  <span className="venue-badge">{venue.capacityDisplay}</span>
-                  <span className="venue-badge">{venue.view}</span>
+            <div className="venue-content">
+              {/* Left Content Section */}
+              <div className="content-section">
+                <div className="venue-header">
+                  <h1 className="venue-title">{venue.title}</h1>
+                  <div className="action-buttons">
+                    <button className="action-btn dining-btn" onClick={handleDiningPackages}>
+                      Dining Packages
+                    </button>
+                  </div>
+                </div>
+
+                <div className="venue-description">
+                  <p className="main-description">{venue.description}</p>
+                  <p className="sub-description">{venue.subDescription}</p>
+                </div>
+
+                <div className="details-grid">
+                  {/* Capacity Section */}
+                  <div className="detail-section">
+                    <h3 className="section-title">CAPACITY</h3>
+                    <div className="capacity-list">
+                      {venue.capacity.map((item, index) => (
+                        <div key={index} className="capacity-item">
+                          <span className="capacity-type">{item.type}</span>
+                          <span className="capacity-value">{item.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Features Section */}
+                  <div className="detail-section">
+                    <h3 className="section-title">FEATURES</h3>
+                    <div className="features-grid">
+                      {venue.features.map((feature, index) => (
+                        <div key={index} className="feature-item">
+                          {feature}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Dimensions Section */}
+                  <div className="detail-section">
+                    <h3 className="section-title">DIMENSIONS</h3>
+                    <div className="dimensions-list">
+                      {venue.dimensions.map((dimension, index) => (
+                        <div key={index} className="dimension-item">
+                          <span className="dimension-type">{dimension.type}</span>
+                          <span className="dimension-value">{dimension.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floor Plan Diagram */}
+                <div className="floor-plan-section">
+                  <div className="floor-plan-diagram">
+                    <div className="plan-shape">
+                      <span className="plan-size">{venue.size}</span>
+                    </div>
+                  </div>
+                  {/* Floor Plan Image */}
+                  <div className="floorplan-compact">
+                    <div className="floorplan-image-small">
+                      <img 
+                        src={venue.floorplanImage} 
+                        alt={`${venue.title} Floor Plan`} 
+                        className="floorplan-image"
+                        onError={(e) => {
+                          console.error(`Failed to load floorplan image: ${venue.floorplanImage}`);
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                    <div className="floorplan-info">
+                      <h4 className="chairmans-title">CHAIRMAN'S LOUNGE</h4>
+                      <p className="chairmans-subtitle">Dining Packages · Enquire Now</p>
+                      <button className="download-button-small">
+                        <span className="download-icon">📥</span>
+                        FLOOR PLAN
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Check Availability Button */}
+                <div className="book-container">
+                  <button 
+                    className="book-button"
+                    onClick={() => handleCheckAvailability(venue.title)}
+                  >
+                    CHECK AVAILABILITY
+                  </button>
                 </div>
               </div>
-            </div>
-              
-            {/* Content Area */}
-            <div className="content-area">
-              <p className="venue-description">{venue.description}</p>
-                
-              <div className="book-container">
-                <button 
-                  className="book-button"
-                  onClick={() => handleCheckAvailability(venue.title)}
-                >
-                  CHECK AVAILABILITY
-                </button>
-              </div>
-                
-              {/* Details Section with Table */}
-              <div className="details-section">
-                <h3 className="details-title">THE DETAILS</h3>
-                
-                <div className="details-table-container">
-                  <table className="details-table">
-                    <thead>
-                      <tr>
-                        <th>ROOM CONDITIONS</th>
-                        <th>CONNECTIVITY</th>
-                        <th>ROOM DIMENSIONS</th>
-                        <th>FLOOR PLAN</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td data-label="ROOM CONDITIONS">
-                          <ul className="table-list">
-                            {venue.roomConditions && venue.roomConditions.map((condition, index) => (
-                              <li key={index} className="table-list-item">
-                                <span className="table-icon">
-                                  {getIconForCondition(condition)}
-                                </span>
-                                <span>{condition.toUpperCase()}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </td>
-                        <td data-label="CONNECTIVITY">
-                          <ul className="table-list">
-                            {venue.connectivity && venue.connectivity.map((item, index) => (
-                              <li key={index} className="table-list-item">
-                                <span className="table-icon">
-                                  {getIconForConnectivity(item)}
-                                </span>
-                                <span>{item.toUpperCase()}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </td>
-                        <td data-label="ROOM DIMENSIONS">
-                          <div className="dimensions-container">
-                            <div className="dimensions-row">
-                              <span className="dimensions-label">Length:</span>
-                              <span className="dimensions-value">{venue.dimensions.length}</span>
-                            </div>
-                            <div className="dimensions-row">
-                              <span className="dimensions-label">Width:</span>
-                              <span className="dimensions-value">{venue.dimensions.width}</span>
-                            </div>
-                            <div className="dimensions-row">
-                              <span className="dimensions-label">Height:</span>
-                              <span className="dimensions-value">{venue.dimensions.height}</span>
-                            </div>
-                            <div className="dimensions-row total-size">
-                              <span className="dimensions-label">Total Size:</span>
-                              <span className="dimensions-value size-highlight">{venue.size}</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td data-label="FLOOR PLAN" className="floorplan-cell">
-                          <div className="floorplan-content">
-                            <div className="floorplan-image-container">
-                              <img 
-                                src={floorplanImage} 
-                                alt="Chairman's Lounge Floor Plan" 
-                                className="floorplan-image"
-                                onError={(e) => {
-                                  console.error(`Failed to load floorplan image: ${floorplanImage}`);
-                                  e.target.style.display = 'none';
-                                }}
-                              />
-                            </div>
-                            
-                            <div className="floorplan-details">
-                              <h4 className="chairmans-title">CHAIRMAN'S LOUNGE</h4>
-                              <p className="chairmans-subtitle">Dining Packages · Enquire Now</p>
-                              
-                              <p className="chairmans-description">
-                                An intimate and versatile event space perfect for your next special event. The Chairman's Lounge offers the perfect blend of elegance and functionality.
-                              </p>
-                              
-                              <button className="download-button">
-                                <span className="download-icon">📥</span>
-                                FLOOR PLAN DOWNLOAD
-                              </button>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+
+              {/* Right Image Section */}
+              <div className="image-section">
+                <div className="venue-image-container">
+                  <img 
+                    src={venue.imagePath}
+                    alt={venue.title}
+                    className="venue-image"
+                    onError={(e) => {
+                      console.error(`Failed to load image: ${venue.imagePath}`);
+                      e.target.style.display = 'none';
+                    }}
+                  />
                 </div>
               </div>
             </div>
