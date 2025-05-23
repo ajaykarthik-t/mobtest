@@ -76,6 +76,46 @@ const AddOns = () => {
     }
   };
 
+  // Handle guest count input change
+  const handleGuestCountChange = (e) => {
+    const value = e.target.value;
+    if (value === '') {
+      return; // Allow empty during typing
+    }
+    const numValue = parseInt(value);
+    if (!isNaN(numValue) && numValue >= 1) {
+      setGuestCount(numValue);
+    }
+  };
+
+  // Handle guest count input blur (when user finishes typing)
+  const handleGuestCountBlur = (e) => {
+    const value = e.target.value;
+    if (value === '' || parseInt(value) < 1) {
+      setGuestCount(1); // Reset to 1 if empty or invalid
+    }
+  };
+
+  // Handle quantity input change
+  const handleQuantityInputChange = (categoryId, itemId, value) => {
+    if (value === '') {
+      // Allow empty during typing
+      return;
+    }
+    const numValue = parseInt(value);
+    if (!isNaN(numValue) && numValue >= 0) {
+      handleQuantityChange(categoryId, itemId, numValue);
+    }
+  };
+
+  // Handle quantity input blur
+  const handleQuantityInputBlur = (categoryId, itemId, e) => {
+    const value = e.target.value;
+    if (value === '' || parseInt(value) < 0) {
+      handleQuantityChange(categoryId, itemId, 0); // Reset to 0 if empty or invalid
+    }
+  };
+
   // Generate time slots
   const generateTimeSlots = () => {
     const slots = [];
@@ -362,27 +402,40 @@ const AddOns = () => {
         <div className="addons-content">
           {/* Left Column - Services */}
           <div className="addons-left-column">
-            {/* Guest Count */}
-            <div className="guest-count-section">
-              <h3>Number of Guests</h3>
-              <div className="guest-count-controls">
-                <button 
-                  className="guest-count-btn"
-                  onClick={() => setGuestCount(Math.max(1, guestCount - 1))}
-                >
-                  −
-                </button>
-                <span className="guest-count-display">{guestCount}</span>
-                <button 
-                  className="guest-count-btn"
-                  onClick={() => setGuestCount(guestCount + 1)}
-                >
-                  +
-                </button>
+            
+            {/* Guest Count Section */}
+            <div className="guest-section">
+              <div className="guest-header">
+                <h3 className="guest-title">Number of Guests</h3>
+                <div className="guest-controls">
+                  <button 
+                    className="guest-btn"
+                    onClick={() => setGuestCount(Math.max(1, guestCount - 1))}
+                  >
+                    −
+                  </button>
+                  <input
+                    type="number"
+                    className="guest-input"
+                    value={guestCount}
+                    onChange={handleGuestCountChange}
+                    onBlur={handleGuestCountBlur}
+                    onFocus={(e) => e.target.select()}
+                    onClick={(e) => e.target.select()}
+                    min="1"
+                    max="1000"
+                  />
+                  <button 
+                    className="guest-btn"
+                    onClick={() => setGuestCount(guestCount + 1)}
+                  >
+                    +
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* All Sections Including Catering */}
+            {/* All Service Sections */}
             <div className="addons-sections">
               {Object.entries(addOnsData).map(([categoryId, category]) => (
                 <div key={categoryId} className="addon-category">
@@ -426,9 +479,28 @@ const AddOns = () => {
                               >
                                 −
                               </button>
-                              <span className="quantity-display">
-                                {getAddOnQuantity(categoryId, item.id)}
-                              </span>
+                              <input
+                                type="number"
+                                className="quantity-input"
+                                value={getAddOnQuantity(categoryId, item.id)}
+                                onChange={(e) => {
+                                  e.stopPropagation();
+                                  handleQuantityInputChange(categoryId, item.id, e.target.value);
+                                }}
+                                onBlur={(e) => {
+                                  handleQuantityInputBlur(categoryId, item.id, e);
+                                }}
+                                onFocus={(e) => {
+                                  e.stopPropagation();
+                                  e.target.select();
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  e.target.select();
+                                }}
+                                min="0"
+                                max="999"
+                              />
                               <button
                                 className="quantity-btn plus"
                                 onClick={(e) => {
@@ -535,13 +607,6 @@ const AddOns = () => {
                     <span className="cost-amount">£{calculateTotalCost().toFixed(2)}</span>
                   </div>
 
-                  {calculateAddOnsCost() > 500 && (
-                    <div className="cost-savings">
-                      <p className="savings-text">
-                        🎉 Great choice! You're getting premium services for your event.
-                      </p>
-                    </div>
-                  )}
                 </div>
 
                 <div className="addons-actions">
